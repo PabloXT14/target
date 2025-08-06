@@ -1,11 +1,15 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { router } from 'expo-router'
+import { router, useLocalSearchParams } from 'expo-router'
 import { MaterialIcons } from '@expo/vector-icons'
 
 import { colors } from '@/theme/colors'
 
-export default function Target() {
-  const randomNumber = Math.floor(Math.random() * 100)
+type RouteParams = {
+  id: string
+}
+
+export default function Transaction() {
+  const { id } = useLocalSearchParams<RouteParams>()
 
   return (
     <View style={styles.container}>
@@ -13,13 +17,10 @@ export default function Target() {
         <MaterialIcons name="arrow-back" size={24} />
       </TouchableOpacity>
 
-      <Text style={styles.title}>Target</Text>
+      <Text style={styles.title}>Transaction</Text>
 
-      <TouchableOpacity
-        onPress={() => router.navigate(`/transaction/${randomNumber}`)}
-        style={styles.button}
-      >
-        <Text style={styles.buttonText}>Go to Transaction</Text>
+      <TouchableOpacity style={styles.button}>
+        <Text style={styles.buttonText}>ID: {id}</Text>
       </TouchableOpacity>
     </View>
   )
@@ -27,7 +28,6 @@ export default function Target() {
 
 const styles = StyleSheet.create({
   container: {
-    position: 'relative',
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
