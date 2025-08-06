@@ -1,25 +1,26 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { router } from 'expo-router'
+import { router, useLocalSearchParams } from 'expo-router'
+import { MaterialIcons } from '@expo/vector-icons'
 
 import { colors } from '@/theme/colors'
 
-export default function Index() {
+type RouteParams = {
+  id: string
+}
+
+export default function InProgress() {
+  const { id } = useLocalSearchParams<RouteParams>()
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Home</Text>
-
-      <TouchableOpacity
-        onPress={() => router.navigate('/target')}
-        style={styles.button}
-      >
-        <Text style={styles.buttonText}>Go to Target</Text>
+      <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+        <MaterialIcons name="arrow-back" size={24} />
       </TouchableOpacity>
 
-      <TouchableOpacity
-        onPress={() => router.navigate('/in-progress/1')}
-        style={styles.button}
-      >
-        <Text style={styles.buttonText}>Go to In Progress</Text>
+      <Text style={styles.title}>In Progress</Text>
+
+      <TouchableOpacity style={styles.button}>
+        <Text style={styles.buttonText}>ID: {id}</Text>
       </TouchableOpacity>
     </View>
   )
@@ -47,5 +48,10 @@ const styles = StyleSheet.create({
     color: colors.gray[100],
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  backButton: {
+    position: 'absolute',
+    top: 40,
+    left: 20,
   },
 })
