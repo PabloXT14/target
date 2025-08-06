@@ -3,16 +3,13 @@ import { router } from 'expo-router'
 
 import { colors } from '@/theme/colors'
 
-export default function Index() {
+export default function Target() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Home</Text>
+      <Text style={styles.title}>Target</Text>
 
-      <TouchableOpacity
-        onPress={() => router.navigate('/target')}
-        style={styles.button}
-      >
-        <Text style={styles.buttonText}>Go to Target</Text>
+      <TouchableOpacity onPress={() => router.back()} style={styles.button}>
+        <Text style={styles.buttonText}>Go to Home</Text>
       </TouchableOpacity>
     </View>
   )
