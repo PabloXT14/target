@@ -2,6 +2,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { router } from 'expo-router'
 
 import { colors } from '@/theme/colors'
+import { fontFamily } from '@/theme/font-family'
 
 export default function Index() {
   return (
@@ -34,7 +35,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontFamily: fontFamily.inter.bold,
   },
   button: {
     marginTop: 20,
