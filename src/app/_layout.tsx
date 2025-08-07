@@ -1,3 +1,4 @@
+import { View } from 'react-native'
 import { Stack } from 'expo-router'
 import {
   useFonts,
@@ -8,6 +9,8 @@ import {
 
 import { colors } from '@/theme/colors'
 
+import { Loading } from '@/components/loading'
+
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
     Inter_400Regular,
@@ -16,7 +19,11 @@ export default function RootLayout() {
   })
 
   if (!fontsLoaded) {
-    return null
+    return (
+      <View style={{ flex: 1, backgroundColor: colors.white }}>
+        <Loading />
+      </View>
+    )
   }
 
   return (
