@@ -9,7 +9,7 @@ import {
 
 import { colors } from '@/theme/colors'
 
-import { Loading } from '@/components/loading'
+import { Loading } from '@/components/shared/loading'
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
