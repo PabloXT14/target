@@ -21,4 +21,11 @@ export const styles = StyleSheet.create({
     color: colors.white,
     fontFamily: fontFamily.inter.medium,
   },
+  summaries: {
+    width: '100%',
+    gap: 12,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
 })
