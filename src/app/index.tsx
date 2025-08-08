@@ -5,7 +5,11 @@ import { Header } from '@/components/app/home/header'
 export default function Index() {
   return (
     <View style={styles.container}>
-      <Header />
+      <Header
+        data={{
+          total: 'R$ 2.680,00',
+        }}
+      />
     </View>
   )
 }

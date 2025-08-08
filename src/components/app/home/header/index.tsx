@@ -3,9 +3,19 @@ import { LinearGradient } from 'expo-linear-gradient'
 
 import { styles } from './styles'
 
-import { colors } from '@/theme/colors'
+import { colors } from '@/theme'
 
-export function Header() {
+import { Separator } from '@/components/shared/separator'
+
+export type HeaderData = {
+  total: string
+}
+
+type HeaderProps = {
+  data: HeaderData
+}
+
+export function Header({ data }: HeaderProps) {
   return (
     <LinearGradient
       colors={[colors.blue[500], colors.blue[800]]}
@@ -13,7 +23,10 @@ export function Header() {
     >
       <View>
         <Text style={styles.label}>Total que você possui</Text>
+        <Text style={styles.total}>{data.total}</Text>
       </View>
+
+      <Separator color={colors.blue[400]} />
     </LinearGradient>
   )
 }
