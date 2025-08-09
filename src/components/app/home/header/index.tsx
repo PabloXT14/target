@@ -6,10 +6,12 @@ import { styles } from './styles'
 import { colors } from '@/theme'
 
 import { Separator } from '@/components/shared/separator'
-import { Summary } from '@/components/shared/summary'
+import { Summary, type SummaryData } from '@/components/shared/summary'
 
 export type HeaderData = {
   total: string
+  input: SummaryData
+  outputs: SummaryData
 }
 
 type HeaderProps = {
@@ -31,20 +33,14 @@ export function Header({ data }: HeaderProps) {
 
       <View style={styles.summaries}>
         <Summary
-          data={{
-            label: 'Entradas',
-            value: 'R$ 6.184,90',
-          }}
+          data={data.input}
           icon={{
             name: 'arrow-upward',
             color: colors.green[500],
           }}
         />
         <Summary
-          data={{
-            label: 'Saídas',
-            value: '-R$ 883,65',
-          }}
+          data={data.outputs}
           icon={{
             name: 'arrow-downward',
             color: colors.red[400],
