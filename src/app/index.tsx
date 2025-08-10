@@ -1,8 +1,10 @@
 import { StyleSheet, View } from 'react-native'
+import { router } from 'expo-router'
 
 import { Header, type HeaderData } from '@/components/app/home/header'
 import { Target } from '@/components/app/home/target'
 import { List } from '@/components/shared/list'
+import { Button } from '@/components/shared/button'
 
 const summary: HeaderData = {
   total: 'R$ 2.680,00',
@@ -49,10 +51,19 @@ export default function Index() {
         title="Metas"
         data={targets}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <Target data={item} />}
+        renderItem={({ item }) => (
+          <Target
+            data={item}
+            onPress={() => router.navigate(`/in-progress/${item.id}`)}
+          />
+        )}
         emptyMessage="Nenhuma meta. Toque em nova meta para criar."
         containerStyle={{ paddingHorizontal: 24 }}
       />
+
+      <View style={{ padding: 24, paddingBottom: 32 }}>
+        <Button title="Nova meta" onPress={() => router.navigate('/target')} />
+      </View>
     </View>
   )
 }
