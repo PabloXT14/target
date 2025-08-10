@@ -1,4 +1,4 @@
-import { StyleSheet, View } from 'react-native'
+import { StatusBar, StyleSheet, View } from 'react-native'
 import { router } from 'expo-router'
 
 import { Header, type HeaderData } from '@/components/app/home/header'
@@ -45,6 +45,8 @@ const targets = [
 export default function Index() {
   return (
     <View style={styles.container}>
+      <StatusBar barStyle="light-content" />
+
       <Header data={summary} />
 
       <List
