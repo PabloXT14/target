@@ -1,10 +1,14 @@
+import { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 
 import { PageHeader } from '@/components/shared/page-header'
 import { Input } from '@/components/shared/input'
 import { Button } from '@/components/shared/button'
+import { CurrencyInput } from '@/components/shared/currency-input'
 
 export default function Target() {
+  const [currency, setCurrency] = useState<number | null>(null)
+
   return (
     <View style={styles.container}>
       <PageHeader
@@ -19,10 +23,11 @@ export default function Target() {
           placeholder="Ex: Viagem para praia, Apple Watch"
         />
 
-        <Input
+        <CurrencyInput
           label="Valor alvo (R$)"
           placeholder="0,00"
-          keyboardType="numeric"
+          value={currency}
+          onChangeValue={setCurrency}
         />
 
         <Button title="Salvar" />
