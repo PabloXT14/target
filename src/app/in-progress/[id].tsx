@@ -1,11 +1,17 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { router, useLocalSearchParams } from 'expo-router'
-import { MaterialIcons } from '@expo/vector-icons'
 
-import { colors } from '@/theme/colors'
+import { PageHeader } from '@/components/shared/page-header'
+import { Progress } from '@/components/app/in-progress/progress'
 
 type RouteParams = {
   id: string
+}
+
+const DETAILS = {
+  current: 'R$ 580,00',
+  target: 'R$ 1.790,00',
+  percentage: 32,
 }
 
 export default function InProgress() {
@@ -13,15 +19,15 @@ export default function InProgress() {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-        <MaterialIcons name="arrow-back" size={24} />
-      </TouchableOpacity>
+      <PageHeader
+        title="Apple Watch"
+        rightButton={{
+          onPress: () => router.navigate(`/target/${id}`),
+          icon: 'edit',
+        }}
+      />
 
-      <Text style={styles.title}>In Progress</Text>
-
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>ID: {id}</Text>
-      </TouchableOpacity>
+      <Progress data={DETAILS} />
     </View>
   )
 }
@@ -29,29 +35,7 @@ export default function InProgress() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: colors.gray[100],
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  button: {
-    marginTop: 20,
-    backgroundColor: colors.blue[500],
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 6,
-  },
-  buttonText: {
-    color: colors.gray[100],
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  backButton: {
-    position: 'absolute',
-    top: 40,
-    left: 20,
+    paddingHorizontal: 24,
+    gap: 32,
   },
 })
