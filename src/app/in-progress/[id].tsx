@@ -10,6 +10,7 @@ import {
 } from '@/components/app/in-progress/transaction'
 
 import { TransactionTypes } from '@/types/transaction-types'
+import { Button } from '@/components/shared/button'
 
 type RouteParams = {
   id: string
@@ -72,7 +73,12 @@ export default function InProgress() {
             }}
           />
         )}
-        emptyMessage="Nenhuma transação. Toque em nova transação para criar."
+        emptyMessage="Nenhuma transação. Toque em nova transação para guardar seu primeiro dinheiro aqui."
+      />
+
+      <Button
+        title="Nova transação"
+        onPress={() => router.navigate(`/transaction/${id}`)}
       />
     </View>
   )
@@ -82,6 +88,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 24,
+    paddingBottom: 32,
     gap: 32,
   },
 })
