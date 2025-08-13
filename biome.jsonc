@@ -13,5 +13,12 @@
         "useSortedAttributes": "off"
       }
     }
+  },
+  "linter": {
+    "rules": {
+      "style": {
+        "noEnum": "off"
+      }
+    }
   }
 }
