@@ -39,13 +39,14 @@ export function Header({ data }: HeaderProps) {
             color: colors.green[500],
           }}
         />
+
         <Summary
           data={data.outputs}
           icon={{
             name: 'arrow-downward',
             color: colors.red[400],
           }}
-          isLeft
+          isRight
         />
       </View>
     </LinearGradient>

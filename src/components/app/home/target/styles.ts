@@ -4,11 +4,10 @@ import { colors, fontFamily } from '@/theme'
 
 export const styles = StyleSheet.create({
   container: {
-    height: 72,
     width: '100%',
+    paddingVertical: 16,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingBottom: 16,
     gap: 12,
   },
   content: {

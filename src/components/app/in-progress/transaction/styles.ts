@@ -5,11 +5,10 @@ import { colors, fontFamily } from '@/theme'
 export const styles = StyleSheet.create({
   container: {
     width: '100%',
-    height: 72,
+    paddingVertical: 16,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 7,
-    paddingBottom: 16,
   },
   info: {
     flex: 1,

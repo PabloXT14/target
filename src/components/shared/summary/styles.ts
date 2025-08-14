@@ -13,7 +13,7 @@ export const styles = StyleSheet.create({
   },
   label: {
     fontSize: 12,
-    color: colors.blue[100],
+    color: colors.white,
     fontFamily: fontFamily.inter.regular,
   },
   value: {
