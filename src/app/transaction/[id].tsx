@@ -1,8 +1,11 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { router, useLocalSearchParams } from 'expo-router'
-import { MaterialIcons } from '@expo/vector-icons'
+import { useState } from 'react'
+import { StyleSheet, View } from 'react-native'
+import { useLocalSearchParams } from 'expo-router'
 
-import { colors } from '@/theme/colors'
+import { PageHeader } from '@/components/shared/page-header'
+import { Button } from '@/components/shared/button'
+import { CurrencyInput } from '@/components/shared/currency-input'
+import { Input } from '@/components/shared/input'
 
 type RouteParams = {
   id: string
@@ -11,17 +14,28 @@ type RouteParams = {
 export default function Transaction() {
   const { id } = useLocalSearchParams<RouteParams>()
 
+  const [currency, setCurrency] = useState<number | null>(null)
+
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-        <MaterialIcons name="arrow-back" size={24} />
-      </TouchableOpacity>
+      <PageHeader
+        title="Nova transação"
+        subtitle="A cada valor guardado você fica mais próximo da sua meta. Se esforce para guardar e evitar retirar."
+      />
 
-      <Text style={styles.title}>Transaction</Text>
+      {/* FORM */}
+      <View style={{ marginTop: 32, gap: 24 }}>
+        <CurrencyInput
+          label="Valor (R$)"
+          placeholder="0,00"
+          value={currency}
+          onChangeValue={setCurrency}
+        />
 
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>ID: {id}</Text>
-      </TouchableOpacity>
+        <Input label="Motivo (opcional)" placeholder="Ex: Compra de um livro" />
+
+        <Button title="Salvar" />
+      </View>
     </View>
   )
 }
@@ -29,29 +43,7 @@ export default function Transaction() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: colors.gray[100],
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  button: {
-    marginTop: 20,
-    backgroundColor: colors.blue[500],
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 6,
-  },
-  buttonText: {
-    color: colors.gray[100],
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  backButton: {
-    position: 'absolute',
-    top: 40,
-    left: 20,
+    paddingHorizontal: 24,
+    paddingBottom: 32,
   },
 })

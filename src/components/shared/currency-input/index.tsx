@@ -20,7 +20,6 @@ export function CurrencyInput({ label, ...props }: CurrencyInputProps) {
         style={styles.input}
         placeholderTextColor={colors.gray[400]}
         cursorColor={colors.gray[400]}
-        prefix="R$ "
         delimiter="."
         separator=","
         precision={2}
