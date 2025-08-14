@@ -6,6 +6,9 @@ import { PageHeader } from '@/components/shared/page-header'
 import { Button } from '@/components/shared/button'
 import { CurrencyInput } from '@/components/shared/currency-input'
 import { Input } from '@/components/shared/input'
+import { TransactionType } from '@/components/app/transaction/transaction-type'
+
+import { TransactionTypes } from '@/types/transaction-types'
 
 type RouteParams = {
   id: string
@@ -15,6 +18,9 @@ export default function Transaction() {
   const { id } = useLocalSearchParams<RouteParams>()
 
   const [currency, setCurrency] = useState<number | null>(null)
+  const [transactionType, setTransactionType] = useState<TransactionTypes>(
+    TransactionTypes.INPUT
+  )
 
   return (
     <View style={styles.container}>
@@ -25,6 +31,11 @@ export default function Transaction() {
 
       {/* FORM */}
       <View style={{ marginTop: 32, gap: 24 }}>
+        <TransactionType
+          selected={transactionType}
+          onChange={setTransactionType}
+        />
+
         <CurrencyInput
           label="Valor (R$)"
           placeholder="0,00"
