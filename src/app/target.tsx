@@ -1,13 +1,57 @@
 import { useState } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { Alert, StyleSheet, View } from 'react-native'
+import { router, useLocalSearchParams } from 'expo-router'
 
 import { PageHeader } from '@/components/shared/page-header'
 import { Input } from '@/components/shared/input'
 import { Button } from '@/components/shared/button'
 import { CurrencyInput } from '@/components/shared/currency-input'
 
+type RouteParams = {
+  id?: string
+}
+
 export default function Target() {
-  const [currency, setCurrency] = useState<number | null>(null)
+  const [isProcessing, setIsProcessing] = useState(false)
+
+  const [name, setName] = useState('')
+  const [amount, setAmount] = useState<number | null>(0)
+
+  const { id } = useLocalSearchParams<RouteParams>()
+
+  function handleSave() {
+    if (!name.trim() || amount === null || amount <= 0) {
+      return Alert.alert(
+        'Atenção',
+        'Preencha nome e valor precisa ser maior que zero.'
+      )
+    }
+
+    setIsProcessing(true)
+
+    if (id) {
+      // Update existing target
+    } else {
+      createTarget()
+    }
+  }
+
+  async function createTarget() {
+    try {
+      Alert.alert('Nova meta', 'Meta criada com sucesso!', [
+        {
+          text: 'Ok',
+          onPress: () => router.back(),
+        },
+      ])
+    } catch (error) {
+      Alert.alert('Erro', 'Não foi possível criar a meta.')
+
+      console.log(error)
+
+      setIsProcessing(false)
+    }
+  }
 
   return (
     <View style={styles.container}>
@@ -21,16 +65,18 @@ export default function Target() {
         <Input
           label="Nome da meta"
           placeholder="Ex: Viagem para praia, Apple Watch"
+          value={name}
+          onChangeText={setName}
         />
 
         <CurrencyInput
           label="Valor alvo (R$)"
           placeholder="0,00"
-          value={currency}
-          onChangeValue={setCurrency}
+          value={amount}
+          onChangeValue={setAmount}
         />
 
-        <Button title="Salvar" />
+        <Button title="Salvar" isLoading={isProcessing} onPress={handleSave} />
       </View>
     </View>
   )
