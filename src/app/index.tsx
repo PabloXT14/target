@@ -1,10 +1,13 @@
-import { StatusBar, StyleSheet, View } from 'react-native'
-import { router } from 'expo-router'
+import { useCallback } from 'react'
+import { Alert, StatusBar, StyleSheet, View } from 'react-native'
+import { router, useFocusEffect } from 'expo-router'
 
 import { Header, type HeaderData } from '@/components/app/home/header'
 import { Target } from '@/components/app/home/target'
 import { List } from '@/components/shared/list'
 import { Button } from '@/components/shared/button'
+
+import { useTargetDatabase } from '@/database/use-target-database'
 
 const summary: HeaderData = {
   total: 'R$ 2.680,00',
@@ -43,6 +46,29 @@ const targets = [
 ]
 
 export default function Index() {
+  const targetDatabase = useTargetDatabase()
+
+  async function fetchTargets() {
+    try {
+      const response = await targetDatabase.listBySavedValue()
+
+      // biome-ignore lint/suspicious/noConsole: dev
+      console.log(response)
+    } catch (error) {
+      Alert.alert('Erro', 'Não foi possível carregar as metas.')
+
+      // biome-ignore lint/suspicious/noConsole: dev
+      console.log(error)
+    }
+  }
+
+  useFocusEffect(
+    // biome-ignore lint/correctness/useExhaustiveDependencies: needed
+    useCallback(() => {
+      fetchTargets()
+    }, [])
+  )
+
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />
