@@ -22,5 +22,6 @@ export const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: fontFamily.inter.regular,
     color: colors.gray[600],
+    marginTop: 24,
   },
 })

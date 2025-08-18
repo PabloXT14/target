@@ -1,11 +1,12 @@
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import { Alert, StatusBar, StyleSheet, View } from 'react-native'
 import { router, useFocusEffect } from 'expo-router'
 
 import { Header, type HeaderData } from '@/components/app/home/header'
-import { Target } from '@/components/app/home/target'
+import { Target, type TargetData } from '@/components/app/home/target'
 import { List } from '@/components/shared/list'
 import { Button } from '@/components/shared/button'
+import { Loading } from '@/components/shared/loading'
 
 import { useTargetDatabase } from '@/database/use-target-database'
 
@@ -21,53 +22,56 @@ const summary: HeaderData = {
   },
 }
 
-const targets = [
-  {
-    id: '1',
-    name: 'Apple Watch',
-    percentage: '50%',
-    current: 'R$ 895,00',
-    target: 'R$ 1.790,00',
-  },
-  {
-    id: '2',
-    name: 'Comprar uma cadeira ergonômica',
-    percentage: '75%',
-    current: 'R$ 900,00',
-    target: 'R$ 1.200,00',
-  },
-  {
-    id: '3',
-    name: 'Fazer uma viagem para o Rio de Janeiro',
-    percentage: '75%',
-    current: 'R$ 2.250,00',
-    target: 'R$ 3.000,00',
-  },
-]
-
 export default function Index() {
+  const [targets, setTargets] = useState<TargetData[]>([])
+  const [isFetching, setIsFetching] = useState(true)
+
   const targetDatabase = useTargetDatabase()
 
-  async function fetchTargets() {
+  async function fetchTargets(): Promise<TargetData[]> {
     try {
       const response = await targetDatabase.listBySavedValue()
 
-      // biome-ignore lint/suspicious/noConsole: dev
-      console.log(response)
+      return response.map((item) => ({
+        id: String(item.id),
+        name: item.name,
+        target: String(item.amount),
+        current: String(item.current),
+        percentage: `${item.percentage.toFixed(0)} %`,
+        created_at: item.created_at,
+        updated_at: item.updated_at,
+      }))
     } catch (error) {
       Alert.alert('Erro', 'Não foi possível carregar as metas.')
 
       // biome-ignore lint/suspicious/noConsole: dev
       console.log(error)
+      return []
     }
+  }
+
+  async function fetchData() {
+    setIsFetching(true)
+
+    const targetDataPromise = fetchTargets()
+
+    const [targetData] = await Promise.all([targetDataPromise])
+
+    setTargets(targetData)
+
+    setIsFetching(false)
   }
 
   useFocusEffect(
     // biome-ignore lint/correctness/useExhaustiveDependencies: needed
     useCallback(() => {
-      fetchTargets()
+      fetchData()
     }, [])
   )
+
+  if (isFetching) {
+    return <Loading />
+  }
 
   return (
     <View style={styles.container}>
@@ -78,7 +82,7 @@ export default function Index() {
       <List
         title="Metas"
         data={targets}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id ?? ''}
         renderItem={({ item }) => (
           <Target
             data={item}
