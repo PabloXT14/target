@@ -1,5 +1,6 @@
-import { StyleSheet, View } from 'react-native'
-import { router, useLocalSearchParams } from 'expo-router'
+import { useCallback, useState } from 'react'
+import { Alert, StyleSheet, View } from 'react-native'
+import { router, useFocusEffect, useLocalSearchParams } from 'expo-router'
 
 import { PageHeader } from '@/components/shared/page-header'
 import { Progress } from '@/components/app/in-progress/progress'
@@ -8,18 +9,17 @@ import {
   Transaction,
   type TransactionData,
 } from '@/components/app/in-progress/transaction'
+import { Button } from '@/components/shared/button'
+import { Loading } from '@/components/shared/loading'
 
 import { TransactionTypes } from '@/types/transaction-types'
-import { Button } from '@/components/shared/button'
+
+import { useTargetDatabase } from '@/database/use-target-database'
+
+import { numberToCurrency } from '@/utils/number-to-currency'
 
 type RouteParams = {
   id: string
-}
-
-const DETAILS = {
-  current: 'R$ 580,00',
-  target: 'R$ 1.790,00',
-  percentage: 32,
 }
 
 const TRANSACTIONS: TransactionData[] = [
@@ -47,19 +47,72 @@ const TRANSACTIONS: TransactionData[] = [
 ]
 
 export default function InProgress() {
+  const [isFetching, setIsFetching] = useState(true)
+  const [details, setDetails] = useState({
+    name: '',
+    current: 'R% 0,00',
+    target: 'R$ 0,00',
+    percentage: 0,
+  })
+
   const { id } = useLocalSearchParams<RouteParams>()
+
+  const targetDatabase = useTargetDatabase()
+
+  async function fetchDetails() {
+    try {
+      const response = await targetDatabase.show(Number(id))
+
+      if (!response) {
+        Alert.alert('Erro', 'Meta não encontrada.')
+        return
+      }
+
+      setDetails({
+        name: response.name,
+        current: numberToCurrency(response.current),
+        target: numberToCurrency(response.amount),
+        percentage: response.percentage,
+      })
+    } catch (error) {
+      Alert.alert('Erro', 'Não foi possível carregar os detalhes da meta.')
+
+      // biome-ignore lint/suspicious/noConsole: dev
+      console.log(error)
+    }
+  }
+
+  async function fetchData() {
+    setIsFetching(true)
+
+    const fetchDetailsPromise = fetchDetails()
+
+    await Promise.all([fetchDetailsPromise])
+
+    setIsFetching(false)
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchData()
+    }, [id])
+  )
+
+  if (isFetching) {
+    return <Loading />
+  }
 
   return (
     <View style={styles.container}>
       <PageHeader
-        title="Apple Watch"
+        title={details.name}
         rightButton={{
           onPress: () => router.navigate(`/target/${id}`),
           icon: 'edit',
         }}
       />
 
-      <Progress data={DETAILS} />
+      <Progress data={details} />
 
       <List
         title="Transações"

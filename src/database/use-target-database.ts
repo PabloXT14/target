@@ -46,7 +46,7 @@ export function useTargetDatabase() {
     `)
   }
 
-  async function show(id: string) {
+  async function show(id: number) {
     return await database.getFirstAsync<TargetResponse>(`
       SELECT
         targets.id,

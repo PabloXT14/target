@@ -65,7 +65,6 @@ export default function Index() {
   }
 
   useFocusEffect(
-    // biome-ignore lint/correctness/useExhaustiveDependencies: needed
     useCallback(() => {
       fetchData()
     }, [])
