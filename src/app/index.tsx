@@ -10,6 +10,8 @@ import { Loading } from '@/components/shared/loading'
 
 import { useTargetDatabase } from '@/database/use-target-database'
 
+import { numberToCurrency } from '@/utils/number-to-currency'
+
 const summary: HeaderData = {
   total: 'R$ 2.680,00',
   input: {
@@ -35,8 +37,8 @@ export default function Index() {
       return response.map((item) => ({
         id: String(item.id),
         name: item.name,
-        target: String(item.amount),
-        current: String(item.current),
+        target: numberToCurrency(item.amount),
+        current: numberToCurrency(item.current),
         percentage: `${item.percentage.toFixed(0)} %`,
         created_at: item.created_at,
         updated_at: item.updated_at,
