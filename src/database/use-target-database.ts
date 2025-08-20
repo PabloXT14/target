@@ -5,6 +5,10 @@ export type TargetCreate = {
   amount: number
 }
 
+export type TargetUpdate = TargetCreate & {
+  id: number
+}
+
 export type TargetResponse = {
   id: number
   name: string
@@ -62,9 +66,25 @@ export function useTargetDatabase() {
     `)
   }
 
+  async function update(data: TargetUpdate) {
+    const statement = await database.prepareAsync(`
+      UPDATE targets SET
+      name = $name,
+      amount = $amount,
+      WHERE id = $id
+    `)
+
+    statement.executeAsync({
+      $name: data.name,
+      $amount: data.amount,
+      $id: data.id,
+    })
+  }
+
   return {
     create,
     listBySavedValue,
     show,
+    update,
   }
 }
