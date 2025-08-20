@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Alert, StyleSheet, View } from 'react-native'
 import { router, useLocalSearchParams } from 'expo-router'
 
@@ -61,6 +61,30 @@ export default function Target() {
       setIsProcessing(false)
     }
   }
+
+  async function fetchDetails(targetId: number) {
+    try {
+      const response = await targetDatabase.show(targetId)
+
+      if (!response) {
+        return
+      }
+
+      setName(response.name)
+      setAmount(response.amount)
+    } catch (error) {
+      Alert.alert('Erro', 'Não foi possível carregar os detalhes da meta.')
+
+      // biome-ignore lint/suspicious/noConsole: dev-only
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    if (id) {
+      fetchDetails(Number(id))
+    }
+  }, [id])
 
   return (
     <View style={styles.container}>
