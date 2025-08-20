@@ -33,7 +33,7 @@ export default function Target() {
     setIsProcessing(true)
 
     if (id) {
-      // Update existing target
+      updateTarget()
     } else {
       createTarget()
     }
@@ -54,6 +54,32 @@ export default function Target() {
       ])
     } catch (error) {
       Alert.alert('Erro', 'Não foi possível criar a meta.')
+
+      // biome-ignore lint/suspicious/noConsole: dev-only
+      console.log(error)
+
+      setIsProcessing(false)
+    }
+  }
+
+  async function updateTarget() {
+    try {
+      setIsProcessing(true)
+
+      await targetDatabase.update({
+        id: Number(id),
+        name,
+        amount,
+      })
+
+      Alert.alert('Sucesso', 'Meta atualizada com sucesso!', [
+        {
+          text: 'Ok',
+          onPress: () => router.back(),
+        },
+      ])
+    } catch (error) {
+      Alert.alert('Erro', 'Não foi possível atualizar a meta.')
 
       // biome-ignore lint/suspicious/noConsole: dev-only
       console.log(error)

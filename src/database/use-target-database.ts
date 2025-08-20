@@ -69,8 +69,8 @@ export function useTargetDatabase() {
   async function update(data: TargetUpdate) {
     const statement = await database.prepareAsync(`
       UPDATE targets SET
-      name = $name,
-      amount = $amount,
+        name = $name,
+        amount = $amount
       WHERE id = $id
     `)
 
