@@ -6,6 +6,15 @@ export type TransactionCreate = {
   observation?: string
 }
 
+export type TransactionResponse = {
+  id: number
+  target_id: number
+  amount: number
+  observation?: string
+  created_at: Date
+  updated_at: Date
+}
+
 export function useTransactionsDatabase() {
   const database = useSQLiteContext()
 
@@ -21,7 +30,19 @@ export function useTransactionsDatabase() {
     })
   }
 
+  function findByTargetId(target_id: number) {
+    return database.getAllSync<TransactionResponse[]>(
+      `
+      SELECT id, target_id, amount, observation, created_at, updated_at
+      FROM transactions
+      WHERE target_id = ${target_id}
+      ORDER BY created_at DESC
+      `
+    )
+  }
+
   return {
     create,
+    findByTargetId,
   }
 }
