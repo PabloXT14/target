@@ -31,7 +31,7 @@ export function useTransactionsDatabase() {
   }
 
   function findByTargetId(target_id: number) {
-    return database.getAllSync<TransactionResponse[]>(
+    return database.getAllAsync<TransactionResponse>(
       `
       SELECT id, target_id, amount, observation, created_at, updated_at
       FROM transactions

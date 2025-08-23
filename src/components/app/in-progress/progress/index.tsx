@@ -28,7 +28,10 @@ export function Progress({ data }: ProgressProps) {
 
       <View style={styles.progress}>
         <View
-          style={[styles.currentProgress, { width: `${data.percentage}%` }]}
+          style={[
+            styles.currentProgress,
+            { width: `${data.percentage > 0 ? data.percentage : 0}%` },
+          ]}
         />
       </View>
     </View>

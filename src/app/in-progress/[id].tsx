@@ -12,39 +12,15 @@ import {
 import { Button } from '@/components/shared/button'
 import { Loading } from '@/components/shared/loading'
 
-import { TransactionTypes } from '@/types/transaction-types'
-
 import { useTargetDatabase } from '@/database/use-target-database'
 
 import { numberToCurrency } from '@/utils/number-to-currency'
+import { useTransactionsDatabase } from '@/database/use-transactions-database'
+import { TransactionTypes } from '@/types/transaction-types'
 
 type RouteParams = {
   id: string
 }
-
-const TRANSACTIONS: TransactionData[] = [
-  {
-    id: '1',
-    value: 'R$ 20,00',
-    date: '12/04/2025',
-    description: 'Restaurante',
-    type: TransactionTypes.OUTPUT,
-  },
-  {
-    id: '2',
-    value: 'R$ 300,00',
-    date: '12/04/2025',
-    description: 'CDB de 110% no banco XPTO',
-    type: TransactionTypes.INPUT,
-  },
-  {
-    id: '3',
-    value: 'R$ 300,00',
-    date: '13/04/2025',
-    description: 'CDB de 110% no banco XPTO',
-    type: TransactionTypes.INPUT,
-  },
-]
 
 export default function InProgress() {
   const [isFetching, setIsFetching] = useState(true)
@@ -54,10 +30,12 @@ export default function InProgress() {
     target: 'R$ 0,00',
     percentage: 0,
   })
+  const [transactions, setTransactions] = useState<TransactionData[]>([])
 
   const { id } = useLocalSearchParams<RouteParams>()
 
   const targetDatabase = useTargetDatabase()
+  const transactionsDatabase = useTransactionsDatabase()
 
   async function fetchDetails() {
     try {
@@ -82,12 +60,35 @@ export default function InProgress() {
     }
   }
 
+  async function fetchTransactions() {
+    try {
+      const response = await transactionsDatabase.findByTargetId(Number(id))
+
+      const parsedTransactions: TransactionData[] = response.map((item) => ({
+        id: String(item.id),
+        value: numberToCurrency(item.amount),
+        date: String(item.created_at),
+        description: item.observation,
+        type:
+          item.amount > 0 ? TransactionTypes.INPUT : TransactionTypes.OUTPUT,
+      }))
+
+      setTransactions(parsedTransactions)
+    } catch (error) {
+      Alert.alert('Erro', 'Não foi possível carregar as transações.')
+
+      // biome-ignore lint/suspicious/noConsole: dev
+      console.log(error)
+    }
+  }
+
   async function fetchData() {
     setIsFetching(true)
 
     const fetchDetailsPromise = fetchDetails()
+    const fetchTransactionsPromise = fetchTransactions()
 
-    await Promise.all([fetchDetailsPromise])
+    await Promise.all([fetchDetailsPromise, fetchTransactionsPromise])
 
     setIsFetching(false)
   }
@@ -116,7 +117,7 @@ export default function InProgress() {
 
       <List
         title="Transações"
-        data={TRANSACTIONS}
+        data={transactions}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <Transaction
