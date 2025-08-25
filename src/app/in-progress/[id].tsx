@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react'
 import { Alert, StyleSheet, View } from 'react-native'
 import { router, useFocusEffect, useLocalSearchParams } from 'expo-router'
+import dayjs from 'dayjs'
 
 import { PageHeader } from '@/components/shared/page-header'
 import { Progress } from '@/components/app/in-progress/progress'
@@ -67,7 +68,7 @@ export default function InProgress() {
       const parsedTransactions: TransactionData[] = response.map((item) => ({
         id: String(item.id),
         value: numberToCurrency(item.amount),
-        date: String(item.created_at),
+        date: dayjs(item.created_at).format('DD/MM/YYYY [às] HH:mm'),
         description: item.observation,
         type:
           item.amount > 0 ? TransactionTypes.INPUT : TransactionTypes.OUTPUT,
