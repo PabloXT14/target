@@ -11,7 +11,7 @@ import { Summary, type SummaryData } from '@/components/shared/summary'
 export type HeaderData = {
   total: string
   input: SummaryData
-  outputs: SummaryData
+  output: SummaryData
 }
 
 type HeaderProps = {
@@ -41,7 +41,7 @@ export function Header({ data }: HeaderProps) {
         />
 
         <Summary
-          data={data.outputs}
+          data={data.output}
           icon={{
             name: 'arrow-downward',
             color: colors.red[400],

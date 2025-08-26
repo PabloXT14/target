@@ -9,30 +9,21 @@ import { Button } from '@/components/shared/button'
 import { Loading } from '@/components/shared/loading'
 
 import { useTargetDatabase } from '@/database/use-target-database'
+import { useTransactionsDatabase } from '@/database/use-transactions-database'
 
 import { numberToCurrency } from '@/utils/number-to-currency'
 
-const summary: HeaderData = {
-  total: 'R$ 2.680,00',
-  input: {
-    label: 'Entradas',
-    value: 'R$ 6.184,90',
-  },
-  outputs: {
-    label: 'Saídas',
-    value: '-R$ 883,65',
-  },
-}
-
 export default function Index() {
   const [targets, setTargets] = useState<TargetData[]>([])
+  const [summary, setSummary] = useState<HeaderData>({} as HeaderData)
   const [isFetching, setIsFetching] = useState(true)
 
   const targetDatabase = useTargetDatabase()
+  const transactionsDatabase = useTransactionsDatabase()
 
   async function fetchTargets(): Promise<TargetData[]> {
     try {
-      const response = await targetDatabase.listBySavedValue()
+      const response = await targetDatabase.listByClosestTarget()
 
       return response.map((item) => ({
         id: String(item.id),
@@ -52,14 +43,57 @@ export default function Index() {
     }
   }
 
+  async function fetchSummary(): Promise<HeaderData> {
+    try {
+      const response = await transactionsDatabase.summary()
+
+      const input = response?.input ?? 0
+      const output = response?.output ?? 0
+
+      return {
+        total: numberToCurrency(input + output),
+        input: {
+          label: 'Entradas',
+          value: numberToCurrency(input),
+        },
+        output: {
+          label: 'Saídas',
+          value: numberToCurrency(output),
+        },
+      }
+    } catch (error) {
+      Alert.alert('Erro', 'Não foi possível carregar o resumo.')
+
+      // biome-ignore lint/suspicious/noConsole: dev
+      console.log(error)
+
+      return {
+        total: numberToCurrency(0),
+        input: {
+          label: 'Entradas',
+          value: numberToCurrency(0),
+        },
+        output: {
+          label: 'Saídas',
+          value: numberToCurrency(0),
+        },
+      }
+    }
+  }
+
   async function fetchData() {
     setIsFetching(true)
 
     const targetDataPromise = fetchTargets()
+    const summaryPromise = fetchSummary()
 
-    const [targetData] = await Promise.all([targetDataPromise])
+    const [targetData, summaryData] = await Promise.all([
+      targetDataPromise,
+      summaryPromise,
+    ])
 
     setTargets(targetData)
+    setSummary(summaryData)
 
     setIsFetching(false)
   }
