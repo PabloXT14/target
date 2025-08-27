@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import { Alert, StyleSheet, View } from 'react-native'
+import { Alert, StyleSheet, View, StatusBar } from 'react-native'
 import { router, useFocusEffect, useLocalSearchParams } from 'expo-router'
 import dayjs from 'dayjs'
 
@@ -137,6 +137,12 @@ export default function InProgress() {
 
   return (
     <View style={styles.container}>
+      <StatusBar
+        barStyle="dark-content"
+        translucent
+        backgroundColor="transparent"
+      />
+
       <PageHeader
         title={details.name}
         rightButton={{
