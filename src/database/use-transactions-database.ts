@@ -6,6 +6,12 @@ export type TransactionCreate = {
   observation?: string
 }
 
+export type TransactionUpdate = {
+  id: number
+  amount?: number
+  observation?: string
+}
+
 export type TransactionResponse = {
   id: number
   target_id: number
@@ -50,6 +56,24 @@ export function useTransactionsDatabase() {
     await database.runAsync('DELETE FROM transactions WHERE id = ?', [id])
   }
 
+  async function update(data: TransactionUpdate) {
+    const { id, amount, observation } = data
+
+    const statement = await database.prepareAsync(`
+      UPDATE transactions
+      SET
+        amount = COALESCE($amount, amount),
+        observation = COALESCE($observation, observation)
+      WHERE id = $id
+    `)
+
+    await statement.executeAsync({
+      $id: id,
+      $amount: amount || null,
+      $observation: observation || null,
+    })
+  }
+
   async function summary() {
     return await database.getFirstAsync<TransactionSummary>(`
         SELECT
@@ -64,5 +88,6 @@ export function useTransactionsDatabase() {
     findByTargetId,
     remove,
     summary,
+    update,
   }
 }
