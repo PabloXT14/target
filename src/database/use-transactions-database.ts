@@ -52,6 +52,16 @@ export function useTransactionsDatabase() {
     )
   }
 
+  function findById(id: number) {
+    return database.getFirstAsync<TransactionResponse>(
+      `
+      SELECT id, target_id, amount, observation, created_at, updated_at
+      FROM transactions
+      WHERE id = ${id}
+      `
+    )
+  }
+
   async function remove(id: number) {
     await database.runAsync('DELETE FROM transactions WHERE id = ?', [id])
   }
@@ -89,5 +99,6 @@ export function useTransactionsDatabase() {
     remove,
     summary,
     update,
+    findById,
   }
 }

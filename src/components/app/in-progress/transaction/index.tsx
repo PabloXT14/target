@@ -18,9 +18,10 @@ export type TransactionData = {
 type TransactionProps = {
   data: TransactionData
   onRemove: () => void
+  onEdit: () => void
 }
 
-export function Transaction({ data, onRemove }: TransactionProps) {
+export function Transaction({ data, onRemove, onEdit }: TransactionProps) {
   return (
     <View style={styles.container}>
       <MaterialIcons
@@ -37,13 +38,13 @@ export function Transaction({ data, onRemove }: TransactionProps) {
         }
       />
 
-      <View style={styles.info}>
+      <TouchableOpacity style={styles.info} onPress={onEdit}>
         <Text style={styles.value}>{data.value}</Text>
 
         <Text style={styles.description} numberOfLines={1}>
           {data.date} • {data.description}
         </Text>
-      </View>
+      </TouchableOpacity>
 
       <TouchableOpacity onPress={onRemove} activeOpacity={0.8}>
         <MaterialIcons name="close" size={18} color={colors.gray[500]} />

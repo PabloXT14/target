@@ -161,6 +161,7 @@ export default function InProgress() {
           <Transaction
             data={item}
             onRemove={() => handleRemoveTransaction(item.id)}
+            onEdit={() => router.navigate(`/edit-transaction/${item.id}`)}
           />
         )}
         emptyMessage="Nenhuma transação. Toque em nova transação para guardar seu primeiro dinheiro aqui."
