@@ -52,9 +52,10 @@ Os principais conhecimentos aplicados nesta aplicação foram:
 - Utilização do `expo-router` como estratégia de roteamento;
 - Utilização do `expo-sqlite` para salvar os dados no banco de dados local;
 
-<!-- ## 🔗 Deploy
 
-O deploy da aplicação pode ser acessada através da seguinte URL base: https://pabloxt14-nlw-expert-notes.vercel.app/ -->
+## 🔗 Deploy
+
+- Download do APK: [Android](https://github.com/PabloXT14/target/releases/download/v1.0.0-beta/target-v1.0.0-beta.apk)
 
 
 ## 🎨 Layout
