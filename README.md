@@ -113,6 +113,17 @@ A seguir, veja uma demonstração das principais telas da aplicação:
   />
 </p>
 
+### Edit Transaction
+
+<p align="center">
+  <img
+    src=".github/screens/edit-transaction.png"
+    alt="Edit Transaction Screen"
+    title="Edit Transaction Screen"
+  />
+</p>
+
+
 ## ⚙ Setup
 
 ### 📝 Requisites
